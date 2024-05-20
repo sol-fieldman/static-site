@@ -9,7 +9,10 @@ class TextNode:
         if not isinstance(self.text_type,str): raise TypeError("Invalid text type.")
 
         self.url = url
-        if not isinstance(self.url,str): raise TypeError("Invalid url.")
+        if not isinstance(self.url,str): raise TypeError("Invalid URL. Must be a string")
+        if ' ' in self.url: raise TypeError("Invalid URL. URLs do not have spaces")
+        if self.url[:8] != 'https://' and self.url[:7] != 'http://':
+            raise TypeError("Invalid URL. Please add http(s):// to prefix.")
 
     def __eq__ (self, other):
         return (
