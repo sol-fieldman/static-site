@@ -31,7 +31,7 @@ class LeafNode(HTMLNode):
         if self.tag == None:
             return self.value
         elif not isinstance(self.tag, str):
-            raise TypeError("Tag must be a string.")
+            raise ValueError("Tag must be a string.")
 
         return f"<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>"
 
