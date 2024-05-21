@@ -7,4 +7,4 @@ from htmlnode import HTMLNode
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html(self):
         node = HTMLNode(None,None,None,{"foo":"bar","fizz":"buzz"})
-        self.assertIsInstance(node.props_to_html(),str)
+        node = self.assertEqual(node.props_to_html(), ' foo="bar" fizz="buzz"')

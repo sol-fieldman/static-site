@@ -10,15 +10,24 @@ class TestTextNode(unittest.TestCase):
         node2 = TextNode("This is a text node", "bold", "https://foo.bar")
         self.assertEqual(node, node2)
 
-    def test_blank_style(self):
-        node = TextNode("This is a text node", None, "foo.bar")
-        node2 = node
-        self.assertEqual(node, node2)
+    def test_style(self):
+        with self.assertRaises(TypeError):
+            node = TextNode("This is a text node", None, "foo.bar")
+            print(node)
 
-    def test_blank_url(self):
-        node = TextNode("This is a text node", "bold", None)
-        node2 = node
-        self.assertEqual(node, node2)
+            node.text_type = 5
+            print(node)
+
+            node.text_type = ['regular', 'bold']
+            print(node)
+
+    def test_url(self):
+        with self.assertRaises(TypeError):
+            print(TextNode("This is a text node", "bold", None))
+        with self.assertRaises(ValueError):
+            print(TextNode("This is a text node", "bold", "foo bar"))
+            print(TextNode("This is a text node", "bold", "foo.bar"))
+
 
 if __name__ == "__main__":
     unittest.main()
