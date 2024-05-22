@@ -59,7 +59,7 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     out_nodes = []
     for node in old_nodes:
         if node.text_type != ValidTextTypes.text:
-            new_nodes.append(node)
+            out_nodes.append(node)
             continue
         new_segments = []
         old_segments = node.text.split(delimiter)
@@ -128,3 +128,14 @@ def split_nodes_link(old_nodes):
             new_nodes
         out_nodes.extend(new_nodes)
     return out_nodes
+
+def text_to_textnodes(txt):
+    nodes = [TextNode(txt)]
+    nodes = split_nodes_delimiter(nodes,"**",ValidTextTypes.bold)
+    nodes = split_nodes_delimiter(nodes,"*",ValidTextTypes.italic)
+    nodes = split_nodes_delimiter(nodes,"`",ValidTextTypes.code)
+    nodes = split_nodes_img(nodes)
+    nodes = split_nodes_link(nodes)
+    return nodes
+
+print(text_to_textnodes("nesting is **very** *scary*"))

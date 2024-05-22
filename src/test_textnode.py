@@ -85,3 +85,24 @@ class TestNodeParsing(unittest.TestCase):
                self.base_node
            ]
        )
+
+    def test_text_to_nodes(self):
+        self.assertEqual(
+            text_to_textnodes(f"**{self.base_node.text}**"),
+            [self.base_node]
+        )
+        self.assertEqual(
+            text_to_textnodes(self.inline_bold.text),
+            [
+                TextNode("foo bar "),
+                self.base_node,
+                TextNode(" foo bar")
+            ]
+        )
+
+        stress_test = "This is text with *italics,* **bold words,** `code snippets,` links, and images. " + \
+            self.inline_img.text + self.inline_link.text
+        self.assertEqual(
+            len(text_to_textnodes(stress_test)),
+            11
+        )
