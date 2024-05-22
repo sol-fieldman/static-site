@@ -39,6 +39,12 @@ class TestTextNode(unittest.TestCase):
             node.url = "foo.bar"
             print(node)
 
+class TestNodeParsing(unittest.TestCase):
+
+    def setUp(self):
+        self.base_node = TextNode("This is a text node", ValidTextTypes.bold)
+        self.inline_bold = TextNode("foo bar **This is a text node** foo bar")
+
     def test_node_conversion(self):
         self.assertEqual(
             text_node_to_html_node(self.base_node),
@@ -58,7 +64,3 @@ class TestTextNode(unittest.TestCase):
                 TextNode(" foo bar")
             ]
         )
-
-
-if __name__ == "__main__":
-    unittest.main()
