@@ -25,9 +25,13 @@ class HTMLNode:
 class LeafNode(HTMLNode):
     def __init__ (self,tag,value,props=None):
         super().__init__(tag,value,None,props)
+        self.test_self()
+
+    def test_self(self):
         if not isinstance(self.value, str): raise ValueError("Must provide value.")
 
     def to_html(self):
+        self.test_self()
         if self.tag == None:
             return self.value
         elif not isinstance(self.tag, str):
@@ -38,11 +42,15 @@ class LeafNode(HTMLNode):
 class ParentNode(HTMLNode):
     def __init__ (self,tag,children,props=None):
         super().__init__(tag,None,children,props)
+        self.test_self()
+
+    def test_self(self):
         if not isinstance(self.tag, str): raise ValueError("Must provide tag.")
         if (not isinstance(self.children, list) or len(self.children) == 0):
             raise ValueError("Invalid children list.")
 
     def to_html(self):
+        self.test_self()
         out = [f"<{self.tag}>"]
         for heir in self.children:
             if isinstance(heir,HTMLNode): out+= heir.to_html()

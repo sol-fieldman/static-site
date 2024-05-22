@@ -10,16 +10,20 @@ class ValidTextTypes(str, Enum):
     text_type_image = "image"
 
 class TextNode:
-    def __init__ (self,text,text_type,url):
+    def __init__ (self,text,text_type="text",url=None):
         self.text = text
         self.text_type = text_type
-        if not isinstance(self.text_type,str): raise TypeError("Invalid text type.")
-
         self.url = url
-        if not isinstance(self.url, str): self.url = ''
-        if ' ' in self.url: raise ValueError("Invalid URL. URLs do not have spaces")
-        if self.url[:8] != 'https://' and self.url[:7] != 'http://':
-            raise ValueError("Invalid URL. Please add http(s):// to prefix.")
+        self.test_self()
+
+    def test_self(self):
+        if not isinstance(self.text_type,str): raise TypeError("Invalid text type.")
+        if not isinstance(self.url, str):
+            self.url = ''
+        else:
+            if ' ' in self.url: raise ValueError("Invalid URL. URLs do not have spaces")
+            if len(self.url) != 0 and self.url[:8] != 'https://' and self.url[:7] != 'http://':
+                raise ValueError("Invalid URL. Please add http(s):// to prefix.")
 
     def __eq__ (self, other):
         return (
@@ -29,7 +33,8 @@ class TextNode:
         )
 
     def __repr__ (self):
-        return f"TextNode({self.text}, {self.text_type}, {self.url})"
+        self.test_self()
+        return f'TextNode("{self.text}", "{self.text_type}", "{self.url}")'
 
 def text_node_to_html_node(text_node):
     used_type = text_node.text_type.lower()
