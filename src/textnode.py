@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from htmlnode import *
+from md_parser import *
 
 class ValidTextTypes:
     text = "text"
@@ -54,7 +56,7 @@ def text_node_to_html_node(text_node):
     else: raise Exception("Invalid text type")
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    new_nodes = []
+    out_nodes = []
     for node in old_nodes:
         if node.text_type != ValidTextTypes.text:
             new_nodes.append(node)
@@ -72,5 +74,57 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
                 new_segments.append(
                     TextNode(old_segments[n],text_type)
                 )
-        new_nodes.extend(new_segments)
-    return new_nodes
+        out_nodes.extend(new_segments)
+    return out_nodes
+
+def split_nodes_img(old_nodes):
+    out_nodes = []
+    for node in old_nodes:
+        if node.text == "":
+            continue
+        images = extract_md_img(node.text)
+        if len(images) == 0:
+            out_nodes.append(node)
+            continue
+        image_tup = images.pop()
+        new_texts = node.text.split(f"![{image_tup[0]}]({image_tup[1]})",1)
+        if new_texts[1] == "":
+            new_nodes = [
+                TextNode(image_tup[0],ValidTextTypes.image,image_tup[1]),
+            ]
+        else:
+            new_nodes = [
+                TextNode(image_tup[0],ValidTextTypes.image,image_tup[1]),
+                TextNode(new_texts[1],node.text_type)
+            ]
+
+        new_nodes = split_nodes_img([TextNode(new_texts[0],node.text_type)]) + \
+            new_nodes
+        out_nodes.extend(new_nodes)
+    return out_nodes
+
+def split_nodes_link(old_nodes):
+    out_nodes = []
+    for node in old_nodes:
+        if node.text == "":
+            continue
+        links = extract_md_link(node.text)
+        if len(links) == 0:
+            out_nodes.append(node)
+            continue
+        link_tup = links.pop()
+        new_texts = node.text.split(f"[{link_tup[0]}]({link_tup[1]})",1)
+        if len(new_texts) == 2 and new_texts[1] == "":
+            new_nodes = [
+                TextNode(link_tup[0],ValidTextTypes.link,link_tup[1]),
+            ]
+        else:
+            new_nodes = [
+                TextNode(link_tup[0],ValidTextTypes.link,link_tup[1]),
+                TextNode(new_texts[1],node.text_type)
+            ]
+
+        new_nodes = split_nodes_link([TextNode(new_texts[0],node.text_type)]) + \
+            new_nodes
+        out_nodes.extend(new_nodes)
+    return out_nodes
