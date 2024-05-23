@@ -11,5 +11,5 @@ def extract_md_link(txt):
     return links
 
 def md_to_blocks(txt):
-    out = txt.splitlines()
+    out = txt.split("\n\n")
     return [line for line in out if line.strip()]

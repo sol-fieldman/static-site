@@ -17,7 +17,7 @@ class ValidBlocks:
 
 def block_to_type(block):
     corrected_block = block.strip()
-    block_lines = block_splitlines()
+    block_lines = block.splitlines()
     if corrected_block[0] == "#":
         headingno = len(re.findall(r'#',corrected_block[:6])) - 1
         return ValidBlocks.h[headingno]
@@ -42,13 +42,13 @@ def block_to_type(block):
         return ValidBlocks.p
 
 def block_to_html(block, block_type):
-    raw_content = text_to_textnodes(block)
+    raw_content = text_to_textnodes(block.lstrip("#> "))
     parsed_content = []
     if block_type == ValidBlocks.ul or block_type == ValidBlocks.ol:
         parsed_content = li_to_html(block, block_type)
     else:
         for node in raw_content:
-            parsed.content.append(text_node_to_html_node(node))
+            parsed_content.append(text_node_to_html_node(node))
     return ParentNode(block_type,parsed_content)
 
 def li_to_html(block, block_type):
@@ -72,7 +72,7 @@ def md_to_html(txt):
 
 def extract_title(txt):
     page = md_to_html(txt)
-    body = page.children[1]
+    body = page.children[0]
     if body.tag != ValidBlocks.h[0]:
         raise SyntaxError("Title missing!")
-    return body.value
+    return body.children[0].value
