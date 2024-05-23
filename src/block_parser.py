@@ -3,6 +3,7 @@
 import re
 from md_parser import *
 from htmlnode import *
+from textnode import *
 
 class ValidBlocks:
     p = "p"
@@ -27,3 +28,17 @@ def block_to_type(block):
         return ValidBlocks.ol
     else:
         return ValidBlocks.p
+
+def block_to_html(block, block_type):
+    raw_content = text_to_textnodes(block)
+    parsed_content = []
+    for node in raw_content: parsed.content.append(text_node_to_html_node(node))
+    return ParentNode(block_type,parsed_content)
+
+def md_to_html(txt):
+    blocks = md_to_blocks(txt)
+    html_blocks = []
+    for block in blocks:
+        block_type = block_to_type(block)
+        html_blocks.append(block_to_html(block, block_type))
+    return ParentNode('div',html_blocks)

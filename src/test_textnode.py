@@ -36,8 +36,6 @@ class TestTextNode(unittest.TestCase):
         with self.assertRaises(ValueError):
             node.url = "foo bar"
             print(node)
-            node.url = "foo.bar"
-            print(node)
 
 class TestNodeParsing(unittest.TestCase):
 

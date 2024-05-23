@@ -9,3 +9,7 @@ def extract_md_img(txt):
 def extract_md_link(txt):
     links = re.findall(r"\[(.*?)\]\((.*?)\)", txt)
     return links
+
+def md_to_blocks(txt):
+    out = txt.splitlines()
+    return [line for line in out if line.strip()]

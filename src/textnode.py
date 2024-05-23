@@ -24,8 +24,6 @@ class TextNode:
             self.url = ''
         else:
             if ' ' in self.url: raise ValueError("Invalid URL. URLs do not have spaces")
-            if len(self.url) != 0 and self.url[:8] != 'https://' and self.url[:7] != 'http://':
-                raise ValueError("Invalid URL. Please add http(s):// to prefix.")
 
     def __eq__ (self, other):
         return (
@@ -138,4 +136,3 @@ def text_to_textnodes(txt):
     nodes = split_nodes_link(nodes)
     return nodes
 
-print(text_to_textnodes("nesting is **very** *scary*"))

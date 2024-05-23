@@ -28,3 +28,12 @@ class Test_Parsing(unittest.TestCase):
                 ("my ego", "https://github.com/sol-fieldman")
             ]
         )
+
+    def test_block_parser(self):
+        text = f"    \n{self.text_with_img}\n \n{self.text_with_link}\n\n"
+        self.assertEqual(
+            md_to_blocks(text),
+            [
+                self.text_with_img, self.text_with_link
+            ]
+        )
